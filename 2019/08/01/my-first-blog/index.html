@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    Hello World |
+    Linux 命令 |
     
     Lame Lamb</title>
   
@@ -23,7 +23,7 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  <article id="post-my-first-blog" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
     
@@ -31,7 +31,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Hello World
+      Linux 命令
     </h1>
   
   
@@ -44,8 +44,8 @@
 
     
       <div class="article-meta">
-        <a href="/2019/08/01/hello-world/" class="article-date">
-  <time datetime="2019-08-01T06:53:43.717Z" itemprop="datePublished">2019-08-01</time>
+        <a href="/2019/08/01/my-first-blog/" class="article-date">
+  <time datetime="2019-08-01T09:09:43.000Z" itemprop="datePublished">2019-08-01</time>
 </a>
         
       </div>
@@ -57,26 +57,43 @@
       
 
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+        <h2 id="文件管理"><a href="#文件管理" class="headerlink" title="文件管理"></a>文件管理</h2><h3 id="复制文件或目录"><a href="#复制文件或目录" class="headerlink" title="复制文件或目录"></a>复制文件或目录</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cp [options] <span class="built_in">source</span> dest</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>参数说明：  </p>
+<ul>
+<li>-a：此选项通常在复制目录时使用，它保留链接、文件属性，并复制目录下的所有内容。其作用等于dpR参数组合。  </li>
+<li>-d：复制时保留链接。这里所说的链接相当于Windows系统中的快捷方式。  </li>
+<li>-f：覆盖已经存在的目标文件而不给出提示。  </li>
+<li>-i：与-f选项相反，在覆盖目标文件之前给出提示，要求用户确认是否覆盖，回答”y”时目标文件将被覆盖。  </li>
+<li>-p：除复制文件的内容外，还把修改时间和访问权限也复制到新文件中。  </li>
+<li>-r：若给出的源文件是一个目录文件，此时将复制该目录下所有的子目录和文件。  </li>
+<li>-l：不复制文件，只是生成链接文件。</li>
+</ul>
+<hr>
+<h3 id="将指定文件的拥有者改为指定的用户或组"><a href="#将指定文件的拥有者改为指定的用户或组" class="headerlink" title="将指定文件的拥有者改为指定的用户或组"></a>将指定文件的拥有者改为指定的用户或组</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ chown [-cfhvR] [--<span class="built_in">help</span>] [--version] user[:group] file...</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+<p>参数说明：  </p>
+<ul>
+<li>user : 新的文件拥有者的使用者 ID  </li>
+<li>group : 新的文件拥有者的使用者组(group)  </li>
+<li>-c : 显示更改的部分的信息  </li>
+<li>-f : 忽略错误信息  </li>
+<li>-h :修复符号链接  </li>
+<li>-v : 显示详细的处理信息  </li>
+<li>-R : 处理指定目录以及其子目录下的所有文件  </li>
+<li>–help : 显示辅助说明  </li>
+<li>–version : 显示版本  </li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://lame-lamb.github.io/2019/08/01/hello-world/" data-id="cjyshih9g00007otg2p779km8"
+      <a data-url="https://lame-lamb.github.io/2019/08/01/my-first-blog/" data-id="cjyshih9k00017otg8cngkqqp"
          class="article-share-link">分享</a>
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/test/">test</a></li></ul>
+
     </footer>
 
   </div>
@@ -85,15 +102,11 @@
     
   <nav class="article-nav">
     
-      <a href="/2019/08/01/my-first-blog/" class="article-nav-link">
-        <strong class="article-nav-caption">前一篇</strong>
-        <div class="article-nav-title">
-          
-            Linux 命令
-          
-        </div>
-      </a>
     
+      <a href="/2019/08/01/hello-world/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">Hello World</div>
+      </a>
     
   </nav>
 
