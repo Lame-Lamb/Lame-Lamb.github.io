@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    二分查找及其变种(转) |
+    
+    Lame Lamb</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-二分查找及其变种" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      二分查找及其变种(转)
+    </h1>
+  
+  
+
+
+
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/09/22/二分查找及其变种/" class="article-date">
+  <time datetime="2019-09-22T09:57:55.000Z" itemprop="datePublished">2019-09-22</time>
+</a>
+        
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h1 id="你真的会写二分查找吗"><a href="#你真的会写二分查找吗" class="headerlink" title="你真的会写二分查找吗"></a><a href="https://www.cnblogs.com/luoxn28/p/5767571.html" target="_blank" rel="noopener">你真的会写二分查找吗</a></h1><h1 id="1-二分查找"><a href="#1-二分查找" class="headerlink" title="1 二分查找"></a>1 二分查找</h1><a id="more"></a>
+
+<p>二分查找是一个基础的算法，也是面试中常考的一个知识点。二分查找就是将查找的键和子数组的中间键作比较，如果被查找的键小于中间键，就在左子数组继续查找；如果大于中间键，就在右子数组中查找，否则中间键就是要找的元素。</p>
+<p><img src="https://images2015.cnblogs.com/blog/772134/201608/772134-20160813105218234-296133868.png" alt></p>
+<p>（图片来自《算法-第4版》）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 二分查找，找到该值在数组中的下标，否则为-1</span><br><span class="line"> */</span><br><span class="line">static int binarySearch(int[] array, int key) &#123;</span><br><span class="line">    //若array没有排序，请先排序</span><br><span class="line">    System.out.println(&quot;排序前：&quot; + Arrays.toString(array));</span><br><span class="line">    Arrays.sort(array);</span><br><span class="line">    System.out.println(&quot;排序后：&quot; + Arrays.toString(array));</span><br><span class="line"> </span><br><span class="line">    int left = 0;</span><br><span class="line">    int right = array.length - 1;</span><br><span class="line"> </span><br><span class="line">    // 这里必须是 &lt;=</span><br><span class="line">    while (left &lt;= right) &#123;</span><br><span class="line">        int mid = (left + right) / 2;</span><br><span class="line">        if (array[mid] == key) &#123;</span><br><span class="line">            return mid;</span><br><span class="line">        &#125;</span><br><span class="line">        else if (array[mid] &lt; key) &#123;</span><br><span class="line">            left = mid + 1;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            right = mid - 1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    return -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>每次移动left和right指针的时候，需要在mid的基础上+1或者-1， 防止出现死循环， 程序也就能够正确的运行。</p>
+<p>注意：代码中的判断条件必须是while (left &lt;= right)，否则的话判断条件不完整，比如：array[3] = {1, 3, 5};待查找的键为5，此时在(low &lt; high)条件下就会找不到，因为low和high相等时，指向元素5，但是此时条件不成立，没有进入while()中。</p>
+<h1 id="2-二分查找的变种"><a href="#2-二分查找的变种" class="headerlink" title="2 二分查找的变种"></a>2 二分查找的变种</h1><p>关于二分查找，如果条件稍微变换一下，比如：数组之中的<strong>数据可能可以重复</strong>，要求返回匹配的数据的最小（或最大）的下标；更近一步，需要找出数组中<strong>第一个大于key的元素</strong>（也就是最小的大于key的元素的）下标，等等。这些，虽然只有一点点的变化，实现的时候确实要更加的细心。</p>
+<p>二分查找的变种和二分查找原理一样，主要就是变换判断条件（也就是边界条件），如果想直接看如何记忆这些变种的窍门，请直接翻到本文最后。下面来看几种二分查找变种的代码：</p>
+<h2 id="2-1-查找第一个与key相等的元素"><a href="#2-1-查找第一个与key相等的元素" class="headerlink" title="2.1 查找第一个与key相等的元素"></a>2.1 查找第一个与key相等的元素</h2><p>查找第一个相等的元素，也就是说等于查找key值的元素有好多个，返回这些元素最左边的元素下标。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// 查找第一个相等的元素</span><br><span class="line">static int findFirstEqual(int[] array, int key) &#123;</span><br><span class="line">    int left = 0;</span><br><span class="line">    int right = array.length - 1;</span><br><span class="line"> </span><br><span class="line">    // 这里必须是 &lt;=</span><br><span class="line">    while (left &lt;= right) &#123;</span><br><span class="line">        int mid = (left + right) / 2;</span><br><span class="line">        if (array[mid] &gt;= key) &#123;</span><br><span class="line">            right = mid - 1;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            left = mid + 1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (left &lt; array.length &amp;&amp; array[left] == key) &#123;</span><br><span class="line">        return left;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    return -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-2-查找最后一个与key相等的元素"><a href="#2-2-查找最后一个与key相等的元素" class="headerlink" title="2.2 查找最后一个与key相等的元素"></a>2.2 查找最后一个与key相等的元素</h2><p>查找最后一个相等的元素，也就是说等于查找key值的元素有好多个，返回这些元素最右边的元素下标。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// 查找最后一个相等的元素</span><br><span class="line">static int findLastEqual(int[] array, int key) &#123;</span><br><span class="line">    int left = 0;</span><br><span class="line">    int right = array.length - 1;</span><br><span class="line"> </span><br><span class="line">    // 这里必须是 &lt;=</span><br><span class="line">    while (left &lt;= right) &#123;</span><br><span class="line">        int mid = (left + right) / 2;</span><br><span class="line">        if (array[mid] &gt; key) &#123;</span><br><span class="line">            right = mid - 1;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            left = mid + 1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (right &gt;= 0 &amp;&amp; array[right] == key) &#123;</span><br><span class="line">        return right;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    return -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-3-查找最后一个等于或者小于key的元素"><a href="#2-3-查找最后一个等于或者小于key的元素" class="headerlink" title="2.3 查找最后一个等于或者小于key的元素"></a>2.3 查找最后一个等于或者小于key的元素</h2><p>查找最后一个等于或者小于key的元素，也就是说等于key值的元素有好多个，返回这些元素最右边的元素下标；如果没有等于key值的元素，则返回小于key的最右边元素下标。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// 查找最后一个等于或者小于key的元素</span><br><span class="line">static int findLastEqualSmaller(int[] array, int key) &#123;</span><br><span class="line">    int left = 0;</span><br><span class="line">    int right = array.length - 1;</span><br><span class="line"> </span><br><span class="line">    // 这里必须是 &lt;=</span><br><span class="line">    while (left &lt;= right) &#123;</span><br><span class="line">        int mid = (left + right) / 2;</span><br><span class="line">        if (array[mid] &gt; key) &#123;</span><br><span class="line">            right = mid - 1;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            left = mid + 1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return right;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-4-查找最后一个小于key的元素"><a href="#2-4-查找最后一个小于key的元素" class="headerlink" title="2.4 查找最后一个小于key的元素"></a>2.4 查找最后一个小于key的元素</h2><p>查找最后一个小于key的元素，也就是说返回小于key的最右边元素下标。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// 查找最后一个小于key的元素</span><br><span class="line">static int findLastSmaller(int[] array, int key) &#123;</span><br><span class="line">    int left = 0;</span><br><span class="line">    int right = array.length - 1;</span><br><span class="line"> </span><br><span class="line">    // 这里必须是 &lt;=</span><br><span class="line">    while (left &lt;= right) &#123;</span><br><span class="line">        int mid = (left + right) / 2;</span><br><span class="line">        if (array[mid] &gt;= key) &#123;</span><br><span class="line">            right = mid - 1;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            left = mid + 1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return right;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-5-查找第一个等于或者大于key的元素"><a href="#2-5-查找第一个等于或者大于key的元素" class="headerlink" title="2.5 查找第一个等于或者大于key的元素"></a>2.5 查找第一个等于或者大于key的元素</h2><p>查找第一个等于或者大于key的元素，也就是说等于key值的元素有好多个，返回这些元素最左边的元素下标；如果没有等于key值的元素，则返回大于key的最左边元素下标。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// 查找第一个等于或者大于key的元素</span><br><span class="line">static int findFirstEqualLarger(int[] array, int key) &#123;</span><br><span class="line">    int left = 0;</span><br><span class="line">    int right = array.length - 1;</span><br><span class="line"> </span><br><span class="line">    // 这里必须是 &lt;=</span><br><span class="line">    while (left &lt;= right) &#123;</span><br><span class="line">        int mid = (left + right) / 2;</span><br><span class="line">        if (array[mid] &gt;= key) &#123;</span><br><span class="line">            right = mid - 1;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            left = mid + 1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return left;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-6-查找第一个大于key的元素"><a href="#2-6-查找第一个大于key的元素" class="headerlink" title="2.6 查找第一个大于key的元素"></a>2.6 查找第一个大于key的元素</h2><p>查找第一个等于key的元素，也就是说返回大于key的最左边元素下标。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// 查找第一个大于key的元素</span><br><span class="line">static int findFirstLarger(int[] array, int key) &#123;</span><br><span class="line">    int left = 0;</span><br><span class="line">    int right = array.length - 1;</span><br><span class="line"> </span><br><span class="line">    // 这里必须是 &lt;=</span><br><span class="line">    while (left &lt;= right) &#123;</span><br><span class="line">        int mid = (left + right) / 2;</span><br><span class="line">        if (array[mid] &gt; key) &#123;</span><br><span class="line">            right = mid - 1;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            left = mid + 1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return left;</span><br><span class="line">&#125;</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 3 二分查找变种总结</span><br></pre></td></tr></table></figure>
+
+<p>// 这里必须是 &lt;=<br>while (left &lt;= right) {<br>    int mid = (left + right) / 2;<br>    if (array[mid] ? key) {<br>        //… right = mid - 1;<br>    }<br>    else {<br>        // … left = mid + 1;<br>    }<br>}<br>return xxx;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">  </span><br><span class="line">二分查找变种较多，不过它们的“套路”是一样的，以上代码就是其套路，如何快速写出二分查找的代码，只需按照以下步骤即可：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### 1 首先判断出是返回left，还是返回right</span><br><span class="line"></span><br><span class="line">因为我们知道最后跳出while (left &lt;= right)循环条件是right &lt; left，且right = left - 1。最后right和left一定是卡在&quot;边界值&quot;的左右两边，如果是比较值为key，查找小于等于（或者是小于）key的元素，则边界值就是等于key的所有元素的最左边那个，其实应该返回left。</span><br><span class="line"></span><br><span class="line">以数组&#123;1, 2, 3, 3, 4, 5&#125;为例，如果需要查找第一个等于或者小于3的元素下标，我们比较的key值是3，则最后left和right需要满足以下条件：</span><br><span class="line"></span><br><span class="line">![](https://images2015.cnblogs.com/blog/772134/201608/772134-20160813153101328-934983178.png)</span><br><span class="line"></span><br><span class="line">我们比较的key值是3，所以此时我们需要返回left。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### 2 判断出比较符号</span><br></pre></td></tr></table></figure>
+
+<p>int mid = (left + right) / 2;<br>if (array[mid] ? key) {<br>    //… right = xxx;<br>}<br>else {<br>    // … left = xxx;<br>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">  </span><br><span class="line">也就是这里的 if (array[mid] ? key) 中的判断符号，结合步骤1和给出的条件，如果是查找小于等于key的元素，因为是要返回left，所以array[mid]等于或者大于key，就应该使用&gt;=，以下是完整代码：</span><br></pre></td></tr></table></figure>
+
+<p>// 查找小于等于key的元素<br>int mid = (left + right) / 2;<br>if (array[mid] &gt;= key) {<br>    right = mid - 1;<br>}<br>else {<br>    left = mid + 1;<br>}<br>```</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://lame-lamb.github.io/2019/09/22/二分查找及其变种/" data-id="ck0uuetkv0001lgtgt3x6zhg5"
+         class="article-share-link">分享</a>
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法-二分查找/">算法 二分查找</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+    
+      <a href="/2019/09/19/Synchronized/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">Synchronized(转)</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2019 Lame Lamb</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/shark.svg" alt="Lame Lamb"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">主页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/snap.svg-min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/search.js"></script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>
